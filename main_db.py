@@ -1,3 +1,4 @@
+import psycopg2.extras
 from psycopg2.errors import UniqueViolation
 
 from DB import conn
@@ -63,10 +64,10 @@ def add_data(user_name: str, text: str, media: str, link: str, subscription_days
         return f'Подписка оформлена {a} на дней'
 
 
-us_name = 'Asya'
+us_name = 'Cate'
 us_text = 'zdvd ggnghh hfthfth'
-us_media = 'hgbwwwwwwwwwwwww'
-us_link = 'qqqqqqqqqqqqqqqqqqq'
+us_media = 'hgbwwyuyvyt'
+us_link = 'qqqq@@@@@@@@@@@'
 us_sub_days = 7
 # print(add_data(us_name, us_text, us_media, us_link, us_sub_days))
 conn.commit()
@@ -79,7 +80,8 @@ def update_subscription_days(user_name: str):
     :return: До окончания подписки осталось (количкство) дней
     """
     with conn.cursor() as cur:
-        cur.execute("""UPDATE data_subscriptions SET subscription_days = subscription_days - 1 WHERE user_name = %s""", (user_name,))
+        cur.execute("""UPDATE data_subscriptions SET subscription_days = subscription_days - 1 WHERE user_name = %s""",
+                    (user_name,))
         cur.execute("""SELECT subscription_days FROM data_subscriptions WHERE user_name = %s""", (user_name,))
         a = list(cur.fetchone())
         cur.execute("""DELETE FROM data_subscriptions WHERE subscription_days = 0""")
@@ -89,3 +91,32 @@ def update_subscription_days(user_name: str):
 us_name = 'Asya'
 # print(update_subscription_days(us_name))
 conn.commit()
+
+
+def data_output():
+    """
+    Функция выводит информацию из таблицы data_subscriptions
+    :return: список словарей из таблицы data_subscriptions
+    """
+    with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+        cur.execute("""SELECT * FROM data_subscriptions""")
+        res = cur.fetchall()
+        res_list = [dict(row) for row in res]
+        return res_list
+
+
+# print(data_output())
+
+def data_output():
+    """
+    Функция выводит информацию из таблицы users
+    :return: список словарей из таблицы users
+    """
+    with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+        cur.execute("""SELECT * FROM users""")
+        res = cur.fetchall()
+        res_list = [dict(row) for row in res]
+        return res_list
+
+
+# print(data_output())
