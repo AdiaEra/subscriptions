@@ -120,3 +120,21 @@ def data_output():
 
 
 # print(data_output())
+
+
+def delete_advertisement(user_name: str):
+    """
+    Функция удаляет объявление из таблицы data_subscriptions
+    :param user_name: user name подписчика
+    :return: подписка конкретного пользователя удалена
+    """
+    with conn.cursor() as cur:
+        delete_query = """DELETE FROM data_subscriptions WHERE user_name = %s"""
+        cur.execute(delete_query, (user_name,))
+        return f'Подписка {user_name} удалена'
+
+
+us_name = 'Cate'
+print(delete_advertisement(us_name))
+conn.commit()
+
