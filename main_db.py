@@ -88,7 +88,7 @@ def update_subscription_days(user_name: str):
         return f'До окончания подписки осталось {a} дней'
 
 
-us_name = 'Asya'
+us_name = 'Cate'
 # print(update_subscription_days(us_name))
 conn.commit()
 
@@ -135,6 +135,22 @@ def delete_advertisement(user_name: str):
 
 
 us_name = 'Cate'
-print(delete_advertisement(us_name))
+# print(delete_advertisement(us_name))
 conn.commit()
 
+
+def output_subscription_days(user_name: str):
+    """
+    Функция выводит словарь с именем пользователя и количеством оставшихся дней подписки
+    :param user_name: имя пользователя
+    :return: словарь с именем пользователя и количеством оставшихся дней подписки
+    """
+    with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
+        cur.execute("""SELECT subscription_days FROM data_subscriptions WHERE user_name = %s""", (user_name,))
+        res = cur.fetchall()
+        res_list = [dict(row) for row in res]
+        return res_list
+
+
+us_name = 'Cate'
+# print(output_subscription_days(us_name))
