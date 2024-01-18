@@ -154,3 +154,22 @@ def output_subscription_days(user_name: str):
 
 us_name = 'Cate'
 # print(output_subscription_days(us_name))
+
+
+def insert_subscription_days(user_name: str, subscription_days: int):
+    """
+    Функция записи в таблицу количества дней подписки
+    :param user_name: имя пользователя, оформившего подписку
+    :param subscription_days: количество дне подписки
+    :return: Количество дней подписки записано в таблицу
+    """
+    with conn.cursor() as cur:
+        cur.execute("""UPDATE data_subscriptions SET subscription_days = 0 + %s WHERE user_name = %s""",
+                    (subscription_days, user_name))
+        return 'Количество дней подписки записано в таблицу'
+
+
+us_sub_days = 7
+us_name = 'Cate'
+# print(insert_subscription_days(us_name, us_sub_days))
+conn.commit()
